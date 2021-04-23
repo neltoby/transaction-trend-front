@@ -46,16 +46,20 @@ PaperComponent.propTypes = {
 const Transaction = () => {
 	const cs = useStyles();
 	const {
-		state: { currentUser },
+		state: {
+			currentUser: {
+				transaction: { amount, transactions },
+			},
+		},
 	} = useGlobalStore();
-	const { spent, income, transaction } = currentUser;
+	const income = 50000;
 
 	return (
 		<Typography component="div" className={cs.root}>
 			<Typography component="div" className={cs.container}>
-				<PaperComponent top="total spent" amount={spent} />
+				<PaperComponent top="total spent" amount={amount} />
 				<PaperComponent top="total income" amount={income} />
-				<PaperComponent top="transactions" amount={transaction} />
+				<PaperComponent top="transactions" amount={transactions} />
 			</Typography>
 		</Typography>
 	);

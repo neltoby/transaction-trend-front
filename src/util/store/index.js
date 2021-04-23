@@ -9,4 +9,5 @@ export const initialState = {
 	currentUser: {},
 	usersLikeCurrentUser: [],
 	drawerOpen: false,
+	trend: [],
 };

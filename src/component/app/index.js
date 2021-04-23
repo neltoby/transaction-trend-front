@@ -5,8 +5,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Provider from '../provider';
 import { initialState } from '../../util/store';
-import ResponsiveSideBar from '../responsive-side-bar';
-import MainBody from '../main-body';
 const Home = lazy(() => import('../../pages'));
 const NoPage = lazy(() => import('../../pages/nopage'));
 
@@ -17,11 +15,11 @@ const useStyles = makeStyles(() => ({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#f4f5fa',
+		backgroundColor: '#fff',
 	},
 	loading: {
-		color: '#fff',
-		backgroundColor: '#fff',
+		color: '#423c68',
+		backgroundColor: '#423c68',
 	},
 }));
 

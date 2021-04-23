@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 			width: '100vw',
 		},
 		[theme.breakpoints.up('md')]: {
-			width: '80%',
+			width: '75%',
 		},
 	},
 }));
@@ -26,7 +26,9 @@ const MainBody = () => {
 				<Route
 					path="/:id/:name"
 					render={({ match }) => {
-						return <UserContainer />;
+						const { id, name } = match.params;
+
+						return <UserContainer id={parseInt(id, 10)} name={name} />;
 					}}
 				/>
 				<Route

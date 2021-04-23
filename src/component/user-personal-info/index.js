@@ -17,7 +17,12 @@ const UserPesonalInfo = () => {
 	const {
 		state: { currentUser },
 	} = useGlobalStore();
-	const { avatar, name, transaction, created_at } = currentUser;
+	const {
+		avatar,
+		name,
+		created_at,
+		transaction: { transactions },
+	} = currentUser;
 
 	return (
 		<div className={cs.root}>
@@ -25,7 +30,7 @@ const UserPesonalInfo = () => {
 				<Avatar src={avatar} />
 				<p className={cs.name}> {name} </p>
 				<p className={cs.transaction}>
-					{transaction} Transaction <Dot color="#ddd" /> Joined{' '}
+					{transactions} Transaction <Dot color="#ddd" /> Joined{' '}
 					<Time date={created_at} />
 				</p>
 			</Typography>

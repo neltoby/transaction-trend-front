@@ -4,17 +4,17 @@ import {
 	USERS_LIKE_CURRENT_USER,
 	CLOSE,
 	OPEN,
+	TREND,
 } from '../action';
 
 export const reducer = (state, action) => {
-	const { type } = action;
+	const { type, payload } = action;
 
 	switch (type) {
 		case ALL_USERS:
-			const { payload } = action;
 			return {
 				...state,
-				allUSers: payload,
+				allUsers: payload,
 			};
 		case CURRENT_USER:
 			return {
@@ -30,6 +30,11 @@ export const reducer = (state, action) => {
 			return {
 				...state,
 				drawerOpen: false,
+			};
+		case TREND:
+			return {
+				...state,
+				trend: payload,
 			};
 		case OPEN:
 			return {

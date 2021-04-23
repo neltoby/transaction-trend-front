@@ -27,22 +27,24 @@ const UsersLike = () => {
 	const cs = useStyles();
 	const {
 		state: {
-			currentUser: { name, usersLike },
+			currentUser: { name },
+			trend,
 		},
-	} = useGlobalStore;
+	} = useGlobalStore();
+	console.log(useGlobalStore(), 'from userlike');
 
-	if (!usersLike.length) return null;
+	if (!trend.length) return null;
 
 	return (
 		<Typography component="div" className={cs.root}>
 			<Typography component="div" className={cs.heading}>
 				USERS LIKE "{name}"
 			</Typography>
-			<Typography compoent="div" className="list">
+			<Typography component="div" className="list">
 				<List className={cs.listRoot}>
-					{usersLike.map((item, i) => {
+					{trend.map((item, i) => {
 						return (
-							<ListItem alignItems="flex-start">
+							<ListItem alignItems="flex-start" key={i}>
 								<ListItemAvatar>
 									<Avatar src={item.avatar} />
 								</ListItemAvatar>

@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import AppBar from '../appbar';
 import { useGlobalStore } from '../../util/store';
 import { actionCreator, ALL_USERS } from '../../util/action';
+import isJson from '../../util/isjson';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -17,6 +18,13 @@ const useStyles = makeStyles((theme) => ({
 	flexContainer: {
 		display: 'flex',
 		height: 'calc(100vh - 2.5rem)',
+	},
+	loading: {
+		width: '100vw',
+		height: '100%',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 }));
 
@@ -36,39 +44,54 @@ const Basic = ({ children }) => {
 const IndexHome = (props) => {
 	const cs = useStyles();
 	const { sideBar, right } = props;
-	const { dispatch } = useGlobalStore();
+	const { state, dispatch } = useGlobalStore();
 
-	const { isLoading, error } = useQuery('allUserData', () =>
-		fetch(`${process.env.URL}users`)
+	const { data, isLoading, error } = useQuery('allUserData', () => {
+		if (state.allUsers.length) {
+			return Promise.resolve(state.allUsers);
+		}
+		fetch(`${process.env.REACT_APP_URL}user`)
 			.then((res) => res.json())
-			.then((response) => dispatch(actionCreator(ALL_USERS, response)))
-	);
+			.then((response) => {
+				console.log(response);
+				const {
+					data: { all_user },
+				} = response;
 
-	if (isLoading) {
+				dispatch(actionCreator(ALL_USERS, isJson(all_user)));
+				return all_user;
+			});
+	});
+
+	if (isLoading || !state.allUsers.length) {
 		return (
 			<Basic>
 				<Typography className={cs.loading}>Loading</Typography>
 			</Basic>
 		);
 	}
-	// if (error) {
-	// 	return (
-	// 		<Basic>
-	// 			<Typography className={cs.loading}>An error has occurred: {error.message}</Typography>
-	// 		</Basic>
-	// 	);
-	// }
+	if (error) {
+		return (
+			<Basic>
+				<Typography className={cs.loading}>
+					An error has occurred: {error.message}
+				</Typography>
+			</Basic>
+		);
+	}
 	return (
 		<Basic>
-			{sideBar}
-			{right}
+			<>
+				{sideBar}
+				{right}
+			</>
 		</Basic>
 	);
 };
 
 IndexHome.propTypes = {
-	sideBar: PropTypes.elementType.isRequired,
-	right: PropTypes.elementType.isRequired,
+	sideBar: PropTypes.element.isRequired,
+	right: PropTypes.element.isRequired,
 };
 
 export default IndexHome;

@@ -8,12 +8,12 @@ import DrawerComponent from '../drawer-component';
 
 const useStyles = makeStyles((theme) => ({
 	drawerList: {
-		width: 350,
+		width: 400,
 	},
 	drawer: {
 		backgroundColor: '#fff',
 		[theme.breakpoints.up('md')]: {
-			width: '20%',
+			width: '25%',
 		},
 	},
 }));

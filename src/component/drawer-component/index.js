@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'column',
 		justifyContent: 'space-between',
 		borderRight: '1px solid #ccc',
+		overflowY: 'scroll',
 	},
 	drawer: {
 		backgroundColor: '#fff',
@@ -39,31 +40,11 @@ const useStyles = makeStyles((theme) => ({
 	header: {
 		textTransform: 'uppercase',
 		fontWeight: 'bold',
+		position: 'relative !important',
 	},
 	list: {
 		width: drawerWidth,
-		// height: drawerHeight,
 		color: '#637381',
-		'& :hover': {
-			borderRight: '4px solid #4d8ef4',
-			'& .MuiListItemText-root': {
-				borderRight: 'none',
-				color: '#4d8ef4',
-				'& :hover': {
-					borderRight: 'none',
-				},
-				'& span': {
-					fontWeight: 600,
-				},
-			},
-			'& .MuiListItemIcon-root': {
-				borderRight: 'none',
-				color: '#4d8ef4',
-				'& :hover': {
-					borderRight: 'none',
-				},
-			},
-		},
 	},
 	listText: {
 		paddingLeft: 0,
@@ -72,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
 			fontWeight: 500,
 			fontSize: '0.8rem',
 		},
+	},
+	secondary: {
+		fontSize: '0.5rem !important',
 	},
 }));
 
@@ -83,7 +67,7 @@ const DrawerComponent = (props) => {
 		dispatch,
 	} = useGlobalStore();
 	const history = useHistory();
-	const style = useMemo(() => ({ fontSize: '0.4rem' }), []);
+	const style = useMemo(() => ({ fontSize: '0.5rem' }), []);
 
 	const currentUserFxn = (data) => {
 		const { id, name } = data;
@@ -94,7 +78,7 @@ const DrawerComponent = (props) => {
 
 	return (
 		<div data-testid="drawer" className={cs.drawerContainer}>
-			<IconContext.Provider value={{ size: '1.8em', className: cs.icons }}>
+			<IconContext.Provider value={{ size: '0.7em', className: cs.icons }}>
 				<List
 					className={cs.list}
 					aria-labelledby="nested-list-subheader"
@@ -115,18 +99,22 @@ const DrawerComponent = (props) => {
 							onClick={() => currentUserFxn(item)}
 						>
 							<ListItemAvatar className={cs.listIcon}>
-								<Avatar alt={item.name} src={'/static/images/avatar/2.jpg'} />
+								<Avatar alt={item.name} src={item.avatar} />
 							</ListItemAvatar>
 							<ListItemText
 								className={cs.listText}
 								primary={<span>{item.name}</span>}
 								secondary={
 									<>
-										{item.transaction} <Dot color="#fff" /> Joined{' '}
-										<Time date={item.created_at} style={style} />
+										<span className={cs.secondary}>
+											{item.transactions} Transactions
+											<Dot color="#fff" /> Joined{' '}
+											<Time date={item.created_at} style={style} />
+										</span>
 									</>
 								}
-							></ListItemText>
+							/>
+
 							<ListItemSecondaryAction>
 								<IoIosArrowForward />
 							</ListItemSecondaryAction>
