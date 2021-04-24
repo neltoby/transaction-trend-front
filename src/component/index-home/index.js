@@ -46,14 +46,13 @@ const IndexHome = (props) => {
 	const { sideBar, right } = props;
 	const { state, dispatch } = useGlobalStore();
 
-	const { data, isLoading, error } = useQuery('allUserData', () => {
+	const { isLoading, error } = useQuery('allUserData', () => {
 		if (state.allUsers.length) {
 			return Promise.resolve(state.allUsers);
 		}
 		fetch(`${process.env.REACT_APP_URL}user`)
 			.then((res) => res.json())
 			.then((response) => {
-				console.log(response);
 				const {
 					data: { all_user },
 				} = response;

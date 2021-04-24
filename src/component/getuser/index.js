@@ -45,9 +45,7 @@ const GetUser = () => {
 		fetch(`${process.env.REACT_APP_URL}user/${firstUser.id}`)
 			.then((res) => res.json())
 			.then((response) => {
-				console.log(response, 'line 52');
 				const { data } = response;
-				console.log(data, 'line 55');
 				dispatch(actionCreator(CURRENT_USER, data));
 				return data;
 			});

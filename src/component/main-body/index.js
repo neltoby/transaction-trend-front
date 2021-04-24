@@ -6,6 +6,9 @@ import NoUser from '../no-user';
 
 const useStyles = makeStyles((theme) => ({
 	content: {
+		display: 'flex',
+		overflowY: 'scroll',
+		flexDirection: 'column',
 		padding: theme.spacing(3),
 		backgroundColor: '#fff',
 		[theme.breakpoints.down('md')]: {
@@ -28,7 +31,7 @@ const MainBody = () => {
 					render={({ match }) => {
 						const { id, name } = match.params;
 
-						return <UserContainer id={parseInt(id, 10)} name={name} />;
+						return <UserContainer id={id} name={name} />;
 					}}
 				/>
 				<Route

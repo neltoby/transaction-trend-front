@@ -51,7 +51,7 @@ const TimeFxn = (props) => {
 
 TimeFxn.defaultProps = {
 	style: {
-		fontSize: '0.5rem',
+		fontSize: '0.6rem',
 	},
 };
 

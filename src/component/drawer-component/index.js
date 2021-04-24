@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -15,7 +15,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Dot from '../dot';
 import { Time } from '../timer';
 import { useGlobalStore } from '../../util/store';
-import { actionCreator, CURRENT_USER, CLOSE } from '../../util/action';
+import { actionCreator, CLOSE } from '../../util/action';
 
 const drawerWidth = '100%';
 const drawerHeight = 'calc(100vh - 2.5rem)';
@@ -68,60 +68,74 @@ const DrawerComponent = (props) => {
 	} = useGlobalStore();
 	const history = useHistory();
 	const style = useMemo(() => ({ fontSize: '0.5rem' }), []);
+	const [visibility, setVisibility] = useState(
+		[].fill(false, 0, allUsers.length)
+	);
 
 	const currentUserFxn = (data) => {
 		const { id, name } = data;
-		dispatch(actionCreator(CURRENT_USER, data));
 		history.push(`/${id}/${name}`);
 		modal && dispatch(actionCreator(CLOSE));
 	};
 
+	const toggleVisibility = (id) => {
+		const newVisibility = visibility.slice();
+		newVisibility[id] = !newVisibility[id];
+		setVisibility(newVisibility);
+	};
+
 	return (
 		<div data-testid="drawer" className={cs.drawerContainer}>
-			<IconContext.Provider value={{ size: '0.7em', className: cs.icons }}>
-				<List
-					className={cs.list}
-					aria-labelledby="nested-list-subheader"
-					subheader={
-						<ListSubheader
-							className={cs.header}
-							component="div"
-							id="nested-list-subheader"
-						>
-							Users
-						</ListSubheader>
-					}
-				>
-					{allUsers.map((item, index) => (
-						<ListItem
-							button
-							key={`${item.id}${index}`}
-							onClick={() => currentUserFxn(item)}
-						>
-							<ListItemAvatar className={cs.listIcon}>
-								<Avatar alt={item.name} src={item.avatar} />
-							</ListItemAvatar>
-							<ListItemText
-								className={cs.listText}
-								primary={<span>{item.name}</span>}
-								secondary={
-									<>
-										<span className={cs.secondary}>
-											{item.transactions} Transactions
-											<Dot color="#fff" /> Joined{' '}
-											<Time date={item.created_at} style={style} />
-										</span>
-									</>
-								}
-							/>
+			<List
+				className={cs.list}
+				aria-labelledby="nested-list-subheader"
+				subheader={
+					<ListSubheader
+						className={cs.header}
+						component="div"
+						id="nested-list-subheader"
+					>
+						Users
+					</ListSubheader>
+				}
+			>
+				{allUsers.map((item, index) => (
+					<ListItem
+						button
+						key={`${item.id}${index}`}
+						onClick={() => currentUserFxn(item)}
+						onMouseOver={() => toggleVisibility(index)}
+						onMouseOut={() => toggleVisibility(index)}
+					>
+						<ListItemAvatar className={cs.listIcon}>
+							<Avatar alt={item.name} src={item.avatar} />
+						</ListItemAvatar>
+						<ListItemText
+							className={cs.listText}
+							primary={<span>{item.name}</span>}
+							secondary={
+								<>
+									<span className={cs.secondary}>
+										{item.transactions} Transactions
+										<Dot color="#aaa" /> Joined{' '}
+										<Time date={item.created_at} style={style} />
+									</span>
+								</>
+							}
+						/>
 
-							<ListItemSecondaryAction>
-								<IoIosArrowForward />
-							</ListItemSecondaryAction>
-						</ListItem>
-					))}
-				</List>
-			</IconContext.Provider>
+						<ListItemSecondaryAction>
+							{visibility[index] ? (
+								<IconContext.Provider
+									value={{ size: '0.7em', className: cs.icons }}
+								>
+									<IoIosArrowForward />
+								</IconContext.Provider>
+							) : null}
+						</ListItemSecondaryAction>
+					</ListItem>
+				))}
+			</List>
 		</div>
 	);
 };
